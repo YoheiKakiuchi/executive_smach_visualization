@@ -354,13 +354,22 @@ class ContainerNode():
                 """
 
         # Color shapes for outcomes
-
+        print('set_styles')
+        print(containers)
+        print(subgraph_shapes)
+        print(containers)
+        print('children')
+        print(self._children)
         # Color children
         if max_depth == -1 or depth <= max_depth:
             # Iterate over children
-            for child_label in self._children:
-                child_path = '/'.join([self._path,child_label])
+            for child_label in self._children + self._container_outcomes:
+                if child_label in self._container_outcomes:
+                    child_path = ':'.join([self._path,child_label])
+                else:
+                    child_path = '/'.join([self._path,child_label])
 
+                print(child_path)
                 child_color = [0.5,0.5,0.5,1]
                 child_fillcolor = [1,1,1,1]
                 child_linewidth = 2
@@ -401,8 +410,9 @@ class ContainerNode():
                                 v = 0.85
                             child_fillcolor = [v,v,v,1.0]
 
-                        
                         for shape in subgraph_shapes['cluster_'+child_path]:
+                            print('shape')
+                            print(shape)
                             pen = shape.pen
                             if len(pen.color) > 3:
                                 pen_color_opacity = pen.color[3]
@@ -423,6 +433,7 @@ class ContainerNode():
                                 containers)
                 else:
                     if child_path in items:
+                        print(child_path)
                         for shape in items[child_path].shapes:
                             if not isinstance(shape,xdot.xdot.TextShape):
                                 shape.pen.color = child_color
